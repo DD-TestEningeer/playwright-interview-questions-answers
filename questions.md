@@ -1039,7 +1039,423 @@ await page.locator(".product-card")
 .click();
 ```
 
+# Playwright Interview Answers (Section 3 – Actions and Interactions)
+
+# 36. How do you navigate to a URL using Playwright?
+
+## Answer
+
+Navigation is performed using the `page.goto()` method.
+
+It opens a webpage in the current browser tab.
+
+---
+
+### Example
+
+```javascript
+await page.goto("https://example.com");
+````
+
+---
+
+### Practical QA Example
+
+Test case: Open login page.
+
+```javascript
+await page.goto("https://example.com/login");
+```
+
+---
+
+# 37. How do you click an element?
+
+## Answer
+
+Playwright provides the `click()` method to perform click actions.
+
+Playwright automatically waits until the element is:
+
+* visible
+* enabled
+* stable
+
+---
+
+### Example
+
+```javascript
+await page.locator("#login").click();
+```
+
+---
+
+### Practical QA Example
+
+Click login button.
+
+```javascript
+await page.getByRole("button", { name: "Login" }).click();
+```
+
+---
+
+# 38. How do you type text in an input field?
+
+## Answer
+
+Use the `fill()` method to enter text.
+
+This method clears existing text before typing.
+
+---
+
+### Example
+
+```javascript
+await page.fill("#username", "admin");
+```
+
+---
+
+### Practical QA Example
+
+Fill login form.
+
+```javascript
+await page.fill("#username", "admin");
+await page.fill("#password", "admin123");
+```
+
+---
+
+# 39. How do you clear text from a field?
+
+## Answer
+
+Use the `fill()` method with an empty value.
+
+---
+
+### Example
+
+```javascript
+await page.fill("#username", "");
+```
+
+---
+
+### Practical QA Example
+
+Clear search box.
+
+```javascript
+await page.fill("#search", "");
+```
+
+---
+
+# 40. How do you perform a double click?
+
+## Answer
+
+Use the `dblclick()` method.
+
+---
+
+### Example
+
+```javascript
+await page.dblclick("#file");
+```
+
+---
+
+### Practical QA Example
+
+Open file with double click.
+
+```javascript
+await page.locator(".document").dblclick();
+```
+
+---
+
+# 41. How do you perform a right-click?
+
+## Answer
+
+Right-click can be performed using the `click()` method with button option.
+
+---
+
+### Example
+
+```javascript
+await page.click("#menu", { button: "right" });
+```
+
+---
+
+### Practical QA Example
+
+Open context menu.
+
+```javascript
+await page.locator(".file").click({ button: "right" });
+```
+
+---
+
+# 42. How do you perform a hover action?
+
+## Answer
+
+Use the `hover()` method.
+
+Hover is commonly used to open menus.
+
+---
+
+### Example
+
+```javascript
+await page.hover("#menu");
+```
+
+---
+
+### Practical QA Example
+
+Hover over navigation menu.
+
+```javascript
+await page.locator(".nav-menu").hover();
+```
+
+---
+
+# 43. How do you select a dropdown value?
+
+## Answer
+
+Use `selectOption()` for HTML select dropdowns.
+
+---
+
+### Example
+
+```javascript
+await page.selectOption("#country", "India");
+```
+
+---
+
+### Practical QA Example
+
+Select country during registration.
+
+```javascript
+await page.selectOption("#country", "USA");
+```
+
+---
+
+# 44. How do you check/uncheck checkboxes?
+
+## Answer
+
+Playwright provides `check()` and `uncheck()` methods.
+
+---
+
+### Example
+
+```javascript
+await page.check("#terms");
+```
+
+---
+
+### Uncheck example
+
+```javascript
+await page.uncheck("#terms");
+```
+
+---
+
+### Practical QA Example
+
+Accept terms and conditions.
+
+```javascript
+await page.check("#acceptTerms");
+```
+
+---
+
+# 45. How do you handle radio buttons?
+
+## Answer
+
+Radio buttons can be selected using `check()`.
+
+---
+
+### Example
+
+```javascript
+await page.check("#male");
+```
+
+---
+
+### Practical QA Example
+
+Select gender option.
+
+```javascript
+await page.check("input[value='female']");
+```
+
+---
+
+# 46. How do you upload files using Playwright?
+
+## Answer
+
+File uploads are handled using `setInputFiles()`.
+
+---
+
+### Example
+
+```javascript
+await page.setInputFiles("#upload", "testfile.pdf");
+```
+
+---
+
+### Practical QA Example
+
+Upload profile picture.
+
+```javascript
+await page.setInputFiles("#profileUpload", "profile.png");
+```
+
+---
+
+# 47. How do you download files using Playwright?
+
+## Answer
+
+Playwright provides `waitForEvent('download')` to capture downloads.
+
+---
+
+### Example
+
+```javascript
+const download = await page.waitForEvent("download");
+
+await page.click("#downloadBtn");
+```
+
+---
+
+### Practical QA Example
+
+Verify invoice download.
+
+```javascript
+const download = await page.waitForEvent("download");
+
+await page.click("#downloadInvoice");
+```
+
+---
+
+# 48. How do you take screenshots of a page?
+
+## Answer
+
+Playwright provides `page.screenshot()`.
+
+---
+
+### Example
+
+```javascript
+await page.screenshot({ path: "page.png" });
+```
+
+---
+
+### Practical QA Example
+
+Capture failure screenshot.
+
+```javascript
+await page.screenshot({ path: "login_error.png" });
+```
+
+---
+
+# 49. How do you take screenshots of a specific element?
+
+## Answer
+
+You can capture a screenshot of a locator.
+
+---
+
+### Example
+
+```javascript
+await page.locator("#logo").screenshot({ path: "logo.png" });
+```
+
+---
+
+### Practical QA Example
+
+Capture product card image.
+
+```javascript
+await page.locator(".product-card").screenshot({ path: "product.png" });
+```
+
+---
+
+# 50. How do you scroll to an element?
+
+## Answer
+
+Use `scrollIntoViewIfNeeded()`.
+
+---
+
+### Example
+
+```javascript
+await page.locator("#footer").scrollIntoViewIfNeeded();
+```
+
+---
+
+### Practical QA Example
+
+Scroll to load more products.
+
+```javascript
+await page.locator(".load-more").scrollIntoViewIfNeeded();
+```
+
 ```
 ```
+
 
 
