@@ -1454,6 +1454,449 @@ Scroll to load more products.
 await page.locator(".load-more").scrollIntoViewIfNeeded();
 ```
 
+# Playwright Interview Answers (Section 4 – Waits, Assertions, and Synchronization)
+
+# 51. What is auto-waiting in Playwright?
+
+## Answer
+
+Playwright automatically waits for elements to be ready before performing actions.
+
+Auto-waiting ensures that the element is:
+
+- Attached to the DOM
+- Visible
+- Stable (not moving)
+- Enabled for interaction
+
+Because of auto-waiting, Playwright eliminates most manual waits used in traditional automation tools.
+
+---
+
+### Example
+
+```javascript
+await page.locator("#login").click();
+````
+
+Playwright will automatically wait until the login button becomes clickable.
+
+---
+
+### Practical QA Example
+
+Login button appears after API response.
+
+```javascript
+await page.getByRole("button", { name: "Login" }).click();
+```
+
+Playwright waits until the button becomes available.
+
+---
+
+# 52. Why are explicit waits rarely needed in Playwright?
+
+## Answer
+
+Playwright provides:
+
+* Auto-waiting
+* Smart locators
+* Retry mechanism
+
+These features reduce the need for manual waits.
+
+Explicit waits are only used in special scenarios such as:
+
+* Waiting for API responses
+* Waiting for network events
+* Waiting for page navigation
+
+---
+
+### Example
+
+```javascript
+await page.waitForTimeout(2000);
+```
+
+---
+
+### Practical QA Example
+
+Temporary debugging wait.
+
+```javascript
+await page.waitForTimeout(3000);
+```
+
+Note: This should not be used in production automation.
+
+---
+
+# 53. How do you wait for an element to appear?
+
+## Answer
+
+Use `locator.waitFor()`.
+
+---
+
+### Example
+
+```javascript
+await page.locator("#dashboard").waitFor();
+```
+
+---
+
+### Practical QA Example
+
+Wait for dashboard after login.
+
+```javascript
+await page.locator("#dashboard").waitFor();
+```
+
+---
+
+# 54. How do you wait for page navigation?
+
+## Answer
+
+Use `waitForNavigation()` when an action triggers navigation.
+
+---
+
+### Example
+
+```javascript
+await Promise.all([
+  page.waitForNavigation(),
+  page.click("#login")
+]);
+```
+
+---
+
+### Practical QA Example
+
+Login redirects to dashboard.
+
+```javascript
+await Promise.all([
+  page.waitForNavigation(),
+  page.click("#loginButton")
+]);
+```
+
+---
+
+# 55. How do you wait for a specific URL?
+
+## Answer
+
+Use `waitForURL()`.
+
+---
+
+### Example
+
+```javascript
+await page.waitForURL("**/dashboard");
+```
+
+---
+
+### Practical QA Example
+
+Verify successful login redirect.
+
+```javascript
+await page.waitForURL("**/home");
+```
+
+---
+
+# 56. How do you wait for a network request?
+
+## Answer
+
+Use `waitForResponse()`.
+
+---
+
+### Example
+
+```javascript
+await page.waitForResponse("**/api/login");
+```
+
+---
+
+### Practical QA Example
+
+Wait for login API.
+
+```javascript
+await page.waitForResponse(response =>
+  response.url().includes("/login") && response.status() === 200
+);
+```
+
+---
+
+# 57. What are assertions in Playwright?
+
+## Answer
+
+Assertions are used to **validate application behavior**.
+
+Playwright provides built-in assertions using the `expect` API.
+
+Common assertions:
+
+* toBeVisible()
+* toHaveText()
+* toHaveURL()
+* toBeEnabled()
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#message"))
+.toHaveText("Login successful");
+```
+
+---
+
+### Practical QA Example
+
+Verify welcome message.
+
+```javascript
+await expect(page.getByText("Welcome Admin")).toBeVisible();
+```
+
+---
+
+# 58. How do you verify page URL?
+
+## Answer
+
+Use `toHaveURL()` assertion.
+
+---
+
+### Example
+
+```javascript
+await expect(page).toHaveURL("https://example.com/dashboard");
+```
+
+---
+
+### Practical QA Example
+
+Verify user lands on dashboard.
+
+```javascript
+await expect(page).toHaveURL(/dashboard/);
+```
+
+---
+
+# 59. How do you verify page title?
+
+## Answer
+
+Use `toHaveTitle()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page).toHaveTitle("Login Page");
+```
+
+---
+
+### Practical QA Example
+
+Validate homepage title.
+
+```javascript
+await expect(page).toHaveTitle(/My Application/);
+```
+
+---
+
+# 60. How do you verify element count?
+
+## Answer
+
+Use `toHaveCount()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator(".product")).toHaveCount(5);
+```
+
+---
+
+### Practical QA Example
+
+Verify product list count.
+
+```javascript
+await expect(page.locator(".product-card")).toHaveCount(10);
+```
+
+---
+
+# 61. How do you verify element contains text?
+
+## Answer
+
+Use `toContainText()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#message"))
+.toContainText("Success");
+```
+
+---
+
+### Practical QA Example
+
+Verify order confirmation.
+
+```javascript
+await expect(page.locator(".alert"))
+.toContainText("Order placed");
+```
+
+---
+
+# 62. How do you verify input field value?
+
+## Answer
+
+Use `toHaveValue()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#username"))
+.toHaveValue("admin");
+```
+
+---
+
+### Practical QA Example
+
+Verify auto-filled email.
+
+```javascript
+await expect(page.locator("#email"))
+.toHaveValue("test@email.com");
+```
+
+---
+
+# 63. How do you verify checkbox state?
+
+## Answer
+
+Use `toBeChecked()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#terms"))
+.toBeChecked();
+```
+
+---
+
+### Practical QA Example
+
+Verify newsletter subscription.
+
+```javascript
+await expect(page.locator("#subscribe"))
+.toBeChecked();
+```
+
+---
+
+# 64. How do you wait for element to disappear?
+
+## Answer
+
+Use `toBeHidden()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#loading"))
+.toBeHidden();
+```
+
+---
+
+### Practical QA Example
+
+Wait until loader disappears.
+
+```javascript
+await expect(page.locator(".spinner"))
+.toBeHidden();
+```
+
+---
+
+# 65. How do you verify element is enabled?
+
+## Answer
+
+Use `toBeEnabled()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#submit")).toBeEnabled();
+```
+
+---
+
+### Practical QA Example
+
+Verify submit button activates after form completion.
+
+```javascript
+await expect(page.locator("#submit")).toBeEnabled();
+```
+
 ```
 ```
 
