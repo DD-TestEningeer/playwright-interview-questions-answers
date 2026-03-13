@@ -575,3 +575,471 @@ View DOM
 ```
 
 
+````markdown
+# Playwright Interview Answers (Section 2 – Locators and Elements)
+
+# 21. What are locators in Playwright?
+
+## Answer
+
+Locators are the **mechanism used to find and interact with elements on a web page**.
+
+Playwright locators are powerful because they include:
+
+- Auto waiting
+- Retry logic
+- Better stability compared to traditional selectors
+
+Locators represent **a way to query elements repeatedly until the condition is satisfied**.
+
+---
+
+### Example
+
+```javascript
+const loginButton = page.locator("#login");
+await loginButton.click();
+````
+
+---
+
+### Practical QA Example
+
+Test case: Verify login button is visible.
+
+```javascript
+await expect(page.locator("#login")).toBeVisible();
+```
+
+---
+
+# 22. What are the recommended locator strategies in Playwright?
+
+## Answer
+
+Playwright recommends **user-facing locators** because they are more stable and readable.
+
+Best locator priority order:
+
+1. getByRole
+2. getByLabel
+3. getByPlaceholder
+4. getByText
+5. getByTestId
+6. CSS/XPath (last option)
+
+---
+
+### Example
+
+```javascript
+await page.getByRole("button", { name: "Login" }).click();
+```
+
+---
+
+### Practical QA Example
+
+Login button:
+
+```javascript
+await page.getByRole("button", { name: "Sign in" }).click();
+```
+
+---
+
+# 23. What is the difference between locator() and page.$()?
+
+## Answer
+
+| Feature         | locator() | page.$() |
+| --------------- | --------- | -------- |
+| Auto wait       | Yes       | No       |
+| Retry mechanism | Yes       | No       |
+| Recommended     | Yes       | No       |
+| Stability       | High      | Low      |
+
+---
+
+### Example using locator()
+
+```javascript
+await page.locator("#submit").click();
+```
+
+---
+
+### Example using page.$()
+
+```javascript
+const element = await page.$("#submit");
+await element.click();
+```
+
+`locator()` is recommended for modern Playwright automation.
+
+---
+
+# 24. What is the getByRole() locator?
+
+## Answer
+
+`getByRole()` locates elements using **ARIA roles**, which represent how users interact with UI components.
+
+Examples of roles:
+
+* button
+* textbox
+* link
+* checkbox
+* heading
+
+---
+
+### Example
+
+```javascript
+await page.getByRole("button", { name: "Login" }).click();
+```
+
+---
+
+### Practical QA Example
+
+Verify a button exists.
+
+```javascript
+await expect(page.getByRole("button", { name: "Submit" })).toBeVisible();
+```
+
+---
+
+# 25. What is the getByText() locator?
+
+## Answer
+
+`getByText()` locates elements using **visible text on the page**.
+
+This is useful when elements do not have unique IDs.
+
+---
+
+### Example
+
+```javascript
+await page.getByText("Login").click();
+```
+
+---
+
+### Practical QA Example
+
+Verify success message.
+
+```javascript
+await expect(page.getByText("Login successful")).toBeVisible();
+```
+
+---
+
+# 26. What is the getByLabel() locator?
+
+## Answer
+
+`getByLabel()` finds form fields associated with a **label element**.
+
+This is very useful for form automation.
+
+---
+
+### Example
+
+```javascript
+await page.getByLabel("Email").fill("test@email.com");
+```
+
+---
+
+### Practical QA Example
+
+Login form automation.
+
+```javascript
+await page.getByLabel("Username").fill("admin");
+await page.getByLabel("Password").fill("admin123");
+```
+
+---
+
+# 27. What is the getByPlaceholder() locator?
+
+## Answer
+
+`getByPlaceholder()` locates input fields using their **placeholder text**.
+
+---
+
+### Example
+
+```javascript
+await page.getByPlaceholder("Enter email").fill("test@email.com");
+```
+
+---
+
+### Practical QA Example
+
+Search functionality.
+
+```javascript
+await page.getByPlaceholder("Search products").fill("Laptop");
+```
+
+---
+
+# 28. How do you locate dynamic elements in Playwright?
+
+## Answer
+
+Dynamic elements have:
+
+* changing IDs
+* dynamic attributes
+* generated class names
+
+To handle them:
+
+* Use partial selectors
+* Use text-based locators
+* Use role-based locators
+
+---
+
+### Example
+
+Dynamic ID:
+
+```html
+<button id="login_12345">
+```
+
+Use partial match:
+
+```javascript
+await page.locator('[id^="login"]').click();
+```
+
+---
+
+### Practical QA Example
+
+Locate dynamic product cards.
+
+```javascript
+await page.getByText("Add to cart").first().click();
+```
+
+---
+
+# 29. How do you handle elements with changing IDs?
+
+## Answer
+
+Avoid using dynamic IDs.
+
+Instead use:
+
+* role locator
+* text locator
+* relative locator
+* CSS partial match
+
+---
+
+### Example
+
+Dynamic element:
+
+```html
+<input id="user_83923">
+```
+
+Better locator:
+
+```javascript
+await page.getByLabel("Username").fill("admin");
+```
+
+---
+
+# 30. How do you verify element visibility in Playwright?
+
+## Answer
+
+Playwright provides built-in assertions.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#login")).toBeVisible();
+```
+
+---
+
+### Practical QA Example
+
+Verify error message appears.
+
+```javascript
+await expect(page.getByText("Invalid credentials")).toBeVisible();
+```
+
+---
+
+# 31. How do you verify element text in Playwright?
+
+## Answer
+
+Use `toHaveText()` assertion.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#message"))
+.toHaveText("Login successful");
+```
+
+---
+
+### Practical QA Example
+
+Verify order confirmation.
+
+```javascript
+await expect(page.getByText("Order placed")).toBeVisible();
+```
+
+---
+
+# 32. How do you check if an element is enabled or disabled?
+
+## Answer
+
+Playwright provides two assertions:
+
+* toBeEnabled()
+* toBeDisabled()
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#submit")).toBeEnabled();
+```
+
+---
+
+### Practical QA Example
+
+Verify submit button is disabled until form is filled.
+
+```javascript
+await expect(page.locator("#submit")).toBeDisabled();
+```
+
+---
+
+# 33. How do you verify element attribute value?
+
+## Answer
+
+Use `toHaveAttribute()`.
+
+---
+
+### Example
+
+```javascript
+await expect(page.locator("#email"))
+.toHaveAttribute("type", "email");
+```
+
+---
+
+### Practical QA Example
+
+Verify link URL.
+
+```javascript
+await expect(page.locator("a.contact"))
+.toHaveAttribute("href","/contact");
+```
+
+---
+
+# 34. How do you locate elements inside shadow DOM?
+
+## Answer
+
+Playwright automatically supports **shadow DOM traversal**.
+
+---
+
+### Example
+
+```javascript
+await page.locator("custom-element >> button").click();
+```
+
+---
+
+### Practical QA Example
+
+Testing web components.
+
+```javascript
+await page.locator("app-login >> #submit").click();
+```
+
+---
+
+# 35. How do you chain locators in Playwright?
+
+## Answer
+
+Locator chaining allows finding elements **inside another element**.
+
+This improves locator accuracy.
+
+---
+
+### Example
+
+```javascript
+await page.locator(".product-card")
+.locator("button")
+.click();
+```
+
+---
+
+### Practical QA Example
+
+Select a product and click add to cart.
+
+```javascript
+await page.locator(".product-card")
+.filter({ hasText: "Laptop" })
+.getByRole("button", { name: "Add to cart" })
+.click();
+```
+
+```
+```
+
+
